@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginHorizontal="@dimen/_6sdp"
+    app:cardCornerRadius="@dimen/_10sdp"
+    android:elevation="@dimen/_15sdp"
+    app:cardBackgroundColor="@color/gray_for_card"
+    android:layout_marginBottom="@dimen/_5sdp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_5sdp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/post_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="11"
+            android:textSize="@dimen/_15ssp"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/post_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="aaaaaaaaaaaa"
+            android:textSize="@dimen/_15ssp"
+            android:textStyle="italic"/>
+
+        <ImageView
+            android:id="@+id/img_in_post"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_150sdp"
+            android:paddingHorizontal="@dimen/_25sdp"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_8sdp"
+            tools:src ="@color/white"
+            />
+
+
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
