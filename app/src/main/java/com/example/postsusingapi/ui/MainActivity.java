@@ -1,4 +1,4 @@
-package com.example.postsusingapi;
+package com.example.postsusingapi.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
