@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.postsusingapi.R;
-import com.example.postsusingapi.data.model.PostResponse;
+import com.example.postsusingapi.data.model.PhotoResponseItem;
 import com.example.postsusingapi.data.model.PostResponseItem;
 import com.example.postsusingapi.data.source.remote.RetrofitClient;
 import com.example.postsusingapi.databinding.FragmentPostsBinding;
@@ -61,6 +61,7 @@ public class postsFragment extends Fragment {
         binding = FragmentPostsBinding.bind(view);
         initRecycler();
         fetchPosts();
+        fetchPhotos();
 
     }
 
@@ -69,7 +70,7 @@ public class postsFragment extends Fragment {
                 .getPosts().enqueue(new Callback<List<PostResponseItem>>() {
                     @Override
                     public void onResponse(Call<List<PostResponseItem>> call, Response<List<PostResponseItem>> response) {
-                        Log.d("dddddddd", "onResponse: " + response.body());
+                        Log.d("dddddddd", "onResponse posts: " + response.body());
                         postsAdapter.addPosts(response.body());
                     }
 
@@ -78,6 +79,23 @@ public class postsFragment extends Fragment {
                         Log.d("ddddddddd", "onFailure: " + t.getLocalizedMessage());
                     }
                 });
+    }
+
+    private void fetchPhotos() {
+        RetrofitClient.getWebService().getPhotos().enqueue(new Callback<List<PhotoResponseItem>>() {
+            @Override
+            public void onResponse(Call<List<PhotoResponseItem>> call, Response<List<PhotoResponseItem>> response) {
+                Log.d("ddddddddddd", "onResponse photo: " + response.body());
+
+                postsAdapter.addPhotos(response.body());
+
+            }
+
+            @Override
+            public void onFailure(Call<List<PhotoResponseItem>> call, Throwable t) {
+                Log.d("ddddddddd", "onFailure photo : " + t.getLocalizedMessage());
+            }
+        });
     }
 
     @Override
