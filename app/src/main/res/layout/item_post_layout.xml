@@ -38,7 +38,7 @@
             android:paddingHorizontal="@dimen/_25sdp"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/_8sdp"
-            tools:src ="@color/white"
+            android:src ="@drawable/img"
             />
 
 

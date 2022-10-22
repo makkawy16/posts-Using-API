@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import com.example.postsusingapi.data.model.PostResponse;
 import com.example.postsusingapi.data.model.PostResponseItem;
 import com.example.postsusingapi.data.source.remote.RetrofitClient;
 import com.example.postsusingapi.databinding.FragmentPostsBinding;
+import com.example.postsusingapi.ui.Adapter.PostsAdapter;
 
 import java.util.List;
 
@@ -27,9 +29,16 @@ import retrofit2.Response;
 public class postsFragment extends Fragment {
 
     private FragmentPostsBinding binding;
+    private PostsAdapter postsAdapter;
 
     public postsFragment() {
         // Required empty public constructor
+    }
+
+    private void initRecycler() {
+        postsAdapter = new PostsAdapter();
+        binding.postsRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.postsRecycler.setAdapter(postsAdapter);
     }
 
 
@@ -50,16 +59,18 @@ public class postsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding = FragmentPostsBinding.bind(view);
+        initRecycler();
         fetchPosts();
 
     }
 
-    private void fetchPosts(){
+    private void fetchPosts() {
         RetrofitClient.getWebService()
                 .getPosts().enqueue(new Callback<List<PostResponseItem>>() {
                     @Override
                     public void onResponse(Call<List<PostResponseItem>> call, Response<List<PostResponseItem>> response) {
-                        Log.d("dddddddd", "onResponse: "+response.body());
+                        Log.d("dddddddd", "onResponse: " + response.body());
+                        postsAdapter.addPosts(response.body());
                     }
 
                     @Override
@@ -72,6 +83,6 @@ public class postsFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        binding=null;
+        binding = null;
     }
 }
