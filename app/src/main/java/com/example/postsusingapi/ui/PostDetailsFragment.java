@@ -1,5 +1,6 @@
 package com.example.postsusingapi.ui;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,7 +24,8 @@ import retrofit2.Response;
 
 public class PostDetailsFragment extends Fragment {
 
-    FragmentPostDetailsBinding binding;
+  private   FragmentPostDetailsBinding binding;
+    private ProgressDialog mloadingBar;
 
 
     public PostDetailsFragment() {
@@ -34,25 +36,36 @@ public class PostDetailsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int postID =PostDetailsFragmentArgs.fromBundle(getArguments())
+        int postId = PostDetailsFragmentArgs.fromBundle(getArguments())
                 .getPostId();
-
-        RetrofitClient.getWebService().getPostDetails(postID)
+        waitnig("Loading" , "Please Wait");
+        RetrofitClient.getWebService().getPostDetails(postId)
                 .enqueue(new Callback<PostResponseItem>() {
                     @Override
                     public void onResponse(Call<PostResponseItem> call, Response<PostResponseItem> response) {
                         Log.d("ttttttttt", "onResponse: " + response.body());
+                        mloadingBar.dismiss();
+                        if (response.isSuccessful())
+                            fetchPostDetails(response.body());
                     }
 
                     @Override
                     public void onFailure(Call<PostResponseItem> call, Throwable t) {
-                        Log.d("ttttttttt", "onFailure: " +t.getLocalizedMessage());
+                        Log.d("ttttttttt", "onFailure: " + t.getLocalizedMessage());
+                        mloadingBar.dismiss();
                     }
                 });
 
+
     }
 
+    private void fetchPostDetails(PostResponseItem post) {
 
+        binding.userId.setText(String.valueOf(post.getUserId()));
+        binding.postId.setText(String.valueOf(post.getId()));
+        binding.postTitle.setText(post.getTitle());
+        binding.postBody.setText(post.getBody());
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,7 +81,13 @@ public class PostDetailsFragment extends Fragment {
 
 
     }
-
+    private void waitnig(String title , String message) {
+        mloadingBar = new ProgressDialog(getContext());
+        mloadingBar.setTitle(title);
+        mloadingBar.setMessage(message);
+        mloadingBar.setCanceledOnTouchOutside(false);
+        mloadingBar.show();
+    }
 
     @Override
     public void onDestroyView() {

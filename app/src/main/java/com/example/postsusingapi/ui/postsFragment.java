@@ -1,5 +1,6 @@
 package com.example.postsusingapi.ui;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -31,6 +32,7 @@ public class postsFragment extends Fragment implements PostsAdapter.PostCLick {
 
     private FragmentPostsBinding binding;
     private PostsAdapter postsAdapter;
+    private ProgressDialog mloadingBar;
 
     public postsFragment() {
         // Required empty public constructor
@@ -66,17 +68,20 @@ public class postsFragment extends Fragment implements PostsAdapter.PostCLick {
     }
 
     private void fetchPosts() {
+        waitnig("Loading","Please Wait");
         RetrofitClient.getWebService()
                 .getPosts().enqueue(new Callback<List<PostResponseItem>>() {
                     @Override
                     public void onResponse(Call<List<PostResponseItem>> call, Response<List<PostResponseItem>> response) {
                         Log.d("dddddddd", "onResponse: " + response.body());
+                        mloadingBar.dismiss();
                         postsAdapter.addPosts(response.body());
                     }
 
                     @Override
                     public void onFailure(Call<List<PostResponseItem>> call, Throwable t) {
                         Log.d("ddddddddd", "onFailure: " + t.getLocalizedMessage());
+                        mloadingBar.dismiss();
                     }
                 });
     }
@@ -92,4 +97,14 @@ public class postsFragment extends Fragment implements PostsAdapter.PostCLick {
         Navigation.findNavController(getView())
                 .navigate(postsFragmentDirections.actionPostsFragmentToPostDetailsFragment(postResponseItem.getId()));
     }
+
+
+    private void waitnig(String title , String message) {
+        mloadingBar = new ProgressDialog(getContext());
+        mloadingBar.setTitle(title);
+        mloadingBar.setMessage(message);
+        mloadingBar.setCanceledOnTouchOutside(false);
+        mloadingBar.show();
+    }
+
 }
