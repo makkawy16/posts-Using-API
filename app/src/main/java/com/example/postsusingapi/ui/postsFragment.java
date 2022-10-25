@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
@@ -26,7 +27,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class postsFragment extends Fragment {
+public class postsFragment extends Fragment implements PostsAdapter.PostCLick {
 
     private FragmentPostsBinding binding;
     private PostsAdapter postsAdapter;
@@ -36,7 +37,7 @@ public class postsFragment extends Fragment {
     }
 
     private void initRecycler() {
-        postsAdapter = new PostsAdapter();
+        postsAdapter = new PostsAdapter(this);
         binding.postsRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.postsRecycler.setAdapter(postsAdapter);
     }
@@ -81,8 +82,14 @@ public class postsFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void postCLicked(PostResponseItem postResponseItem) {
+        Navigation.findNavController(getView())
+                .navigate(postsFragmentDirections.actionPostsFragmentToPostDetailsFragment(postResponseItem.getId()));
     }
 }

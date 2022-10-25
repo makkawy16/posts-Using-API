@@ -9,5 +9,18 @@
         android:id="@+id/postsFragment"
         android:name="com.example.postsusingapi.ui.postsFragment"
         android:label="fragment_posts"
-        tools:layout="@layout/fragment_posts" />
+        tools:layout="@layout/fragment_posts" >
+        <action
+            android:id="@+id/action_postsFragment_to_postDetailsFragment"
+            app:destination="@id/postDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/postDetailsFragment"
+        android:name="com.example.postsusingapi.ui.PostDetailsFragment"
+        android:label="fragment_post_details"
+        tools:layout="@layout/fragment_post_details" >
+        <argument
+            android:name="postId"
+            app:argType="integer" />
+    </fragment>
 </navigation>

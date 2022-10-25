@@ -4,7 +4,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +15,11 @@ import java.util.List;
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.viewHolder> {
 
     private List<PostResponseItem> postResponseItemList;
+    private PostCLick postCLick;
+
+    public PostsAdapter(PostCLick postCLick) {
+        this.postCLick = postCLick;
+    }
 
     public void addPosts(List<PostResponseItem> postResponseItemList) {
         this.postResponseItemList = postResponseItemList;
@@ -46,12 +50,24 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.viewHolder> 
         return postResponseItemList == null ? 0 : postResponseItemList.size();
     }
 
-    static class viewHolder extends RecyclerView.ViewHolder {
+     class viewHolder extends RecyclerView.ViewHolder {
         ItemPostLayoutBinding binding;
 
         public viewHolder(ItemPostLayoutBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            binding.getRoot().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    postCLick.postCLicked(postResponseItemList.get(getLayoutPosition()));
+                }
+            });
         }
     }
+
+    public interface PostCLick {
+        public void postCLicked(PostResponseItem postResponseItem);
+    }
+
+
 }
