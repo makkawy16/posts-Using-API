@@ -26,6 +26,7 @@ public class PostDetailsFragment extends Fragment {
 
   private   FragmentPostDetailsBinding binding;
     private ProgressDialog mloadingBar;
+    private PostResponseItem postdetails;
 
 
     public PostDetailsFragment() {
@@ -36,9 +37,9 @@ public class PostDetailsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int postId = PostDetailsFragmentArgs.fromBundle(getArguments())
-                .getPostId();
-        waitnig("Loading" , "Please Wait");
+         postdetails = PostDetailsFragmentArgs.fromBundle(getArguments())
+                .getPostDetails();
+        /*waitnig("Loading" , "Please Wait");
         RetrofitClient.getWebService().getPostDetails(postId)
                 .enqueue(new Callback<PostResponseItem>() {
                     @Override
@@ -54,7 +55,7 @@ public class PostDetailsFragment extends Fragment {
                         Log.d("ttttttttt", "onFailure: " + t.getLocalizedMessage());
                         mloadingBar.dismiss();
                     }
-                });
+                });*/
 
 
     }
@@ -78,6 +79,7 @@ public class PostDetailsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding = FragmentPostDetailsBinding.bind(view);
+        fetchPostDetails(postdetails);
 
 
     }

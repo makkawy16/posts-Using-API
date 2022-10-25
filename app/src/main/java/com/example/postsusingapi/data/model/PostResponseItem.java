@@ -2,7 +2,9 @@ package com.example.postsusingapi.data.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class PostResponseItem{
+import java.io.Serializable;
+
+public class PostResponseItem implements Serializable {
 
 	@SerializedName("id")
 	private int id;

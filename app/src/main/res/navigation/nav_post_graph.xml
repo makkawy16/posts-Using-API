@@ -20,7 +20,7 @@
         android:label="fragment_post_details"
         tools:layout="@layout/fragment_post_details" >
         <argument
-            android:name="postId"
-            app:argType="integer" />
+            android:name="postDetails"
+            app:argType="com.example.postsusingapi.data.model.PostResponseItem" />
     </fragment>
 </navigation>

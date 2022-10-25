@@ -95,7 +95,7 @@ public class postsFragment extends Fragment implements PostsAdapter.PostCLick {
     @Override
     public void postCLicked(PostResponseItem postResponseItem) {
         Navigation.findNavController(getView())
-                .navigate(postsFragmentDirections.actionPostsFragmentToPostDetailsFragment(postResponseItem.getId()));
+                .navigate(postsFragmentDirections.actionPostsFragmentToPostDetailsFragment(postResponseItem));
     }
 
 
