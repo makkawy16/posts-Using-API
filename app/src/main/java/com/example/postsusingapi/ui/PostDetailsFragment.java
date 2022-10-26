@@ -6,16 +6,22 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.postsusingapi.R;
+import com.example.postsusingapi.data.model.CommentResponseItem;
 import com.example.postsusingapi.data.model.PostResponseItem;
 import com.example.postsusingapi.data.source.remote.RetrofitClient;
 import com.example.postsusingapi.databinding.FragmentPostDetailsBinding;
+import com.example.postsusingapi.ui.Adapter.CommentsAdapter;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,8 +31,8 @@ import retrofit2.Response;
 public class PostDetailsFragment extends Fragment {
 
   private   FragmentPostDetailsBinding binding;
-    private ProgressDialog mloadingBar;
     private PostResponseItem postdetails;
+    CommentsAdapter commentsAdapter;
 
 
     public PostDetailsFragment() {
@@ -39,25 +45,15 @@ public class PostDetailsFragment extends Fragment {
         super.onCreate(savedInstanceState);
          postdetails = PostDetailsFragmentArgs.fromBundle(getArguments())
                 .getPostDetails();
-        /*waitnig("Loading" , "Please Wait");
-        RetrofitClient.getWebService().getPostDetails(postId)
-                .enqueue(new Callback<PostResponseItem>() {
-                    @Override
-                    public void onResponse(Call<PostResponseItem> call, Response<PostResponseItem> response) {
-                        Log.d("ttttttttt", "onResponse: " + response.body());
-                        mloadingBar.dismiss();
-                        if (response.isSuccessful())
-                            fetchPostDetails(response.body());
-                    }
-
-                    @Override
-                    public void onFailure(Call<PostResponseItem> call, Throwable t) {
-                        Log.d("ttttttttt", "onFailure: " + t.getLocalizedMessage());
-                        mloadingBar.dismiss();
-                    }
-                });*/
 
 
+
+    }
+
+    private void initRecycler(){
+        commentsAdapter=new CommentsAdapter();
+        binding.commentRecycler.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.commentRecycler.setAdapter(commentsAdapter);
     }
 
     private void fetchPostDetails(PostResponseItem post) {
@@ -66,6 +62,24 @@ public class PostDetailsFragment extends Fragment {
         binding.postId.setText(String.valueOf(post.getId()));
         binding.postTitle.setText(post.getTitle());
         binding.postBody.setText(post.getBody());
+
+binding.progressLoading.setVisibility(View.VISIBLE);
+//show Comments
+        RetrofitClient.getWebService().getComments(post.getId())
+                .enqueue(new Callback<List<CommentResponseItem>>() {
+                    @Override
+                    public void onResponse(Call<List<CommentResponseItem>> call, Response<List<CommentResponseItem>> response) {
+                        commentsAdapter.addComments(response.body());
+                        binding.progressLoading.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<CommentResponseItem>> call, Throwable t) {
+
+                        Toast.makeText(requireContext(), ""+t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        binding.progressLoading.setVisibility(View.GONE);
+                    }
+                });
     }
 
     @Override
@@ -79,16 +93,10 @@ public class PostDetailsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding = FragmentPostDetailsBinding.bind(view);
+        initRecycler();
         fetchPostDetails(postdetails);
 
 
-    }
-    private void waitnig(String title , String message) {
-        mloadingBar = new ProgressDialog(getContext());
-        mloadingBar.setTitle(title);
-        mloadingBar.setMessage(message);
-        mloadingBar.setCanceledOnTouchOutside(false);
-        mloadingBar.show();
     }
 
     @Override
