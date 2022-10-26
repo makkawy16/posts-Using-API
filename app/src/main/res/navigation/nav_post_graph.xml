@@ -12,13 +12,21 @@
         tools:layout="@layout/fragment_posts" >
         <action
             android:id="@+id/action_postsFragment_to_postDetailsFragment"
-            app:destination="@id/postDetailsFragment" />
+            app:destination="@id/postDetailsFragment"
+/>
+           <!-- app:popUpTo="@id/nav_post_graph"
+            app:popUpToInclusive="true"-->
+
+
     </fragment>
     <fragment
         android:id="@+id/postDetailsFragment"
         android:name="com.example.postsusingapi.ui.PostDetailsFragment"
         android:label="fragment_post_details"
-        tools:layout="@layout/fragment_post_details" >
+        tools:layout="@layout/fragment_post_details"
+
+        app:popUpTo="@id/nav_post_graph"
+        app:popUpToInclusive="true">
         <argument
             android:name="postDetails"
             app:argType="com.example.postsusingapi.data.model.PostResponseItem" />
